@@ -1,0 +1,1 @@
+export { OpenWeatherMapGateway } from './open-weather-map.gateway'

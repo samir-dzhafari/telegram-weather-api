@@ -1,0 +1,1 @@
+export { IWeatherGateway } from './weather-gateway.interface'

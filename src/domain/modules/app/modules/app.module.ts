@@ -1,5 +1,6 @@
-import { LogEntity } from "@/data/database/entities";
+import { LogEntity } from '@/data/database/entities';
 import { LogsModule } from '@/domain/modules/logs';
+import { TelegramModule } from "@/domain/modules/telegram";
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -22,7 +23,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       }),
     }),
     LogsModule,
-    WeatherModule
+    TelegramModule,
   ],
 })
 export class AppModule {}
