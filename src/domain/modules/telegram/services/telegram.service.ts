@@ -13,7 +13,7 @@ export class TelegramService {
 
   async execute(dto: TelegramBaseDto): Promise<string> {
     const answer =
-      'Hello! Enter the command "/weather <city>" to find out the weather.';
+      'Hello! Enter the command "/weather <city>" to find out the weather. The bot was created as a test for BobrAI';
 
     await this.logsRepository.save({
       telegramUserId: dto.userId,
