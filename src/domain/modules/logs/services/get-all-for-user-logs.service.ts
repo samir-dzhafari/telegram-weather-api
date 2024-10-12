@@ -1,34 +1,50 @@
-import { LogEntity } from '@/data/database/entities';
-import { LogResponse } from '@/domain/entities/logs';
+import { LogEntity } from "@/data/database/entities";
+import { LogResponse } from "@/domain/entities/logs";
 import { GetAllForUserLogsDto } from "@/domain/modules/logs";
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { HttpException, Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class GetAllForUserLogsService {
   constructor(
     @InjectRepository(LogEntity)
-    private logsRepository: Repository<LogEntity>,
-  ) {}
+    private logsRepository: Repository<LogEntity>
+  ) {
+  }
 
-  async execute(userId: number, dto: GetAllForUserLogsDto): Promise<LogResponse[]> {
-    const queryBuilder = this.logsRepository.createQueryBuilder('log');
+  async execute(
+    userId: number,
+    dto: GetAllForUserLogsDto
+  ): Promise<LogResponse[]> {
+    const queryBuilder = this.logsRepository.createQueryBuilder("log");
 
-    queryBuilder.where('log.telegramUserId = :userId', { userId });
+    queryBuilder.where("log.telegramUserId = :userId", { userId } );
 
     if (dto.startDate) {
-      queryBuilder.andWhere('log.datetime >= :startDate', { startDate: new Date(dto.startDate) });
+      queryBuilder.andWhere(
+        "log.datetime >= :startDate",
+        { startDate: new Date(dto.startDate) }
+      );
     }
 
     if (dto.endDate) {
-      queryBuilder.andWhere('log.datetime <= :endDate', { endDate: new Date(dto.endDate) });
+      queryBuilder.andWhere(
+        "log.datetime <= :endDate",
+        { endDate: new Date(dto.endDate) }
+      );
     }
 
-    const entities = await queryBuilder
-    .skip(dto.page * dto.limit)
-    .take(dto.limit)
-    .getMany();
+    const page = dto?.page ?? 0;
+    const limit = dto?.limit ?? 100;
+
+    if (limit > 2000) {
+      throw new HttpException("Limit exceeds maximum value of 2000", 404);
+    }
+
+    const entities = await queryBuilder.skip(page * limit).
+      take(limit).
+      getMany();
 
     return entities.map((entity) => LogResponse.fromEntity(entity));
   }

@@ -1,13 +1,11 @@
 import { Weather as WeatherEntity } from '@/domain/entities/weather';
-import { ApiProperty } from '@nestjs/swagger';
+import { ITelegramMessageResponse } from "@/domain/interface";
 
-export class Weather {
-  @ApiProperty({ description: 'Telegram User ID', example: '123456' })
-  telegramUserId: number;
-
+export class Weather implements ITelegramMessageResponse {
   temperature: number;
   feelsLike: number;
   humidity: number;
+  descriptions: string;
   windSpeed: number;
 
   static fromDomain(weather: WeatherEntity): Weather {
@@ -16,8 +14,13 @@ export class Weather {
     response.temperature = weather.temperature;
     response.feelsLike = weather.feelsLike;
     response.humidity = weather.humidity;
+    response.descriptions = weather.descriptions.join(', ');
     response.windSpeed = weather.windSpeed;
 
     return response;
+  }
+
+  getAnswer() {
+    return `Temperature: ${this.temperature}°C\nFeels like: ${this.feelsLike}°C\nHumidity: ${this.humidity}%\nWind speed: ${this.windSpeed} m/s\nDescription: ${this.descriptions}`;
   }
 }

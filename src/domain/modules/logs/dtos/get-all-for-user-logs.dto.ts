@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import { IsDateString, IsInt, IsOptional, Min } from "class-validator";
 
 export class GetAllForUserLogsDto {
+  @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(0)
@@ -12,8 +13,9 @@ export class GetAllForUserLogsDto {
     type: 'int',
     nullable: false,
   })
-  page: number = 0;
+  page?: number = 0;
 
+  @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
@@ -23,7 +25,7 @@ export class GetAllForUserLogsDto {
     type: 'int',
     nullable: false,
   })
-  limit: number = 100;
+  limit?: number = 100;
 
   @IsOptional()
   @IsDateString()

@@ -3,7 +3,14 @@ import { GetAllForUserLogsDto } from '@/domain/modules/logs/dtos/get-all-for-use
 import { GetAllLogsDto } from '@/domain/modules/logs/dtos/get-all-logs.dto';
 import { GetAllForUserLogsService } from '@/domain/modules/logs/services/get-all-for-user-logs.service';
 import { GetAllLogsService } from '@/domain/modules/logs/services/get-all-logs.service';
-import { Controller, Get, HttpStatus, Param, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Query
+} from "@nestjs/common";
 import {
   ApiOperation,
   ApiParam,
@@ -71,12 +78,6 @@ export class LogsController {
     description: 'Limit',
     type: 'int',
   })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Success',
-    type: LogResponse,
-    isArray: true,
-  })
   @ApiQuery({
     name: 'startDate',
     required: false,
@@ -89,9 +90,15 @@ export class LogsController {
     description: 'End date and time in YYYY-MM-DD HH:mm:ss format',
     type: 'string',
   })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: LogResponse,
+    isArray: true,
+  })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async getUserLogs(
-    @Param('userId') userId: number,
+    @Param('userId', ParseIntPipe) userId: number,
     @Query() query: GetAllForUserLogsDto,
   ) {
     return this.getAllForUserLogsService.execute(userId, query);
