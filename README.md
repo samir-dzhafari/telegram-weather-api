@@ -13,7 +13,7 @@ This is a Telegram bot designed to provide the current weather in a specified ci
 
 2. **Environment Variables**  
    Rename `.env.example` to `.env` and fill in the necessary information:
-    - For Telegram: `TELEGRAM_TOKEN`, `WEBHOOK_PATH`, `DOMAIN`
+    - For Telegram: `TELEGRAM_TOKEN`
 
 3. **Run Database with Docker**  
    Make sure Docker is installed on your system. Follow the instructions [here](https://docs.docker.com/engine/install/) to install Docker if you haven't already.
@@ -54,26 +54,6 @@ When the command is successfully executed, the bot will respond with the followi
     Humidity: <value>% 
     Wind speed: <value> m/s Description: ${weather.descriptions}
 ```
-
-# Notes
-To ensure the Telegram bot works on a local server, you need to follow these steps:
-
-1. **Install ngrok**  
-   Download and install ngrok. You can find the installation instructions on the [ngrok website](https://ngrok.com/download).
-
-2. **Register and Configure ngrok**  
-   Sign up for an account at ngrok and obtain your API key. Configure ngrok with your API key.
-
-3. **Run ngrok**  
-   Start ngrok to expose your local server:
-   ```bash
-   ngrok http 3000
-   ```
-
-4. **Update Environment Variables**  
-   In the `.env` file, set the `DOMAIN` variable to the domain provided by ngrok.
-
-With these steps completed, your Telegram bot should be up and running, ready to provide weather updates!
 
 # Caching
 To improve the performance of the bot and reduce the number of requests to the weather API, caching has been implemented. The bot caches the weather data for each city for a specified duration. This allows for quicker responses when users request the same city's weather information within the cache validity period.
